@@ -88,15 +88,6 @@ std::string readOSVersion () const
 	// https://docs.microsoft.com/en-us/windows/desktop/sysinfo/getting-the-system-version
 	// https://docs.microsoft.com/en-us/windows/desktop/api/winver/nf-winver-getfileversioninfoa
 
-	typedef struct {
-		WORD  wLength;
-		WORD  wValueLength;
-		WORD  wType;
-		WCHAR szKey;
-		WORD  Padding;
-		WORD  Value;
-	} String;
-
 	LPCSTR  lptstrFilename = "kernel32.dll";
 	LPDWORD lpdwHandle = NULL;
 	DWORD dwLen = 0;
@@ -107,11 +98,6 @@ std::string readOSVersion () const
 	
 	lib.GetFileVersionInfoA (lptstrFilename, NULL, dwLen, lpData);
 	
-
-	PUINT   puLen = NULL;
-
-	unsigned int error = GetLastError ();
-
 	struct LANGANDCODEPAGE {
 		WORD wLanguage;
 		WORD wCodePage;
@@ -144,7 +130,7 @@ std::string readOSVersion () const
 		void* buffer;
 		unsigned int dwBytes;
 
-		// Retrieve file description for language and code page "i". 
+		// Retrieve product version for language and code page "i". 
 		lib.VerQueryValueA (lpData,
 			SubBlock,
 			(LPVOID*) &buffer,
